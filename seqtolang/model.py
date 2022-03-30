@@ -25,7 +25,7 @@ class SeqToLangModel(nn.Module):
         embedded = embedded.view(batch_size, num_of_words, num_of_ngrams, -1)
         embedded_sum = embedded.sum(2) / lens.view(batch_size, 1, 1).float()
 
-        pack = pack_padded_sequence(embedded_sum, lens, batch_first=True, enforce_sorted=False)
+        pack = pack_padded_sequence(embedded_sum, lens.cpu(), batch_first=True, enforce_sorted=False)
         rnn_outputs, last_hidden = self.rnn(pack)
         unpacked, unpacked_len = pad_packed_sequence(rnn_outputs, batch_first=True)
 
